@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz de Epítetos Famosos</title>
+    <style>
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        #score-display {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz: Descubra de Quem é o Epíteto!</h1>
+        <div id="quiz"></div>
+        <div id="score-display"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Quem é conhecido como 'O Bruxo do Cosme Velho'?",
+                options: ["José de Alencar", "Machado de Assis", "Lima Barreto"],
+                correct: 1
+            },
+            {
+                question: "'A Pequena Notável' é o epíteto de:",
+                options: ["Elis Regina", "Chiquinha Gonzaga", "Carmen Miranda"],
+                correct: 2
+            },
+            {
+        question: "Qual cidade é conhecida como 'A Terra da Garoa'?",
+        options: ["Rio de Janeiro", "São Paulo", "Brasília"],
+        correct: 1
+    },
+    {
+        question: "Quem é conhecido como 'O Rei do Baião'?",
+        options: ["Dominguinhos", "Luiz Gonzaga", "Zé Ramalho"],
+        correct: 1
+    },
+    {
+        question: "Qual país é conhecido como 'O País do Sol Nascente'?",
+        options: ["Rússia", "China", "Japão"],
+        correct: 2
+    },
+    {
+        question: "'O Poeta dos Escravos' é o epíteto de:",
+        options: ["Machado de Assis", "Castro Alves", "Cruz e Sousa"],
+        correct: 1
+    },
+    {
+        question: "Qual cidade é conhecida como 'A Cidade Luz'?",
+        options: ["Paris", "Rio de Janeiro", "São Paulo"],
+        correct: 0
+    },
+            {
+                question: "Quem ficou conhecido como 'O Rei do Pop'?",
+                options: ["Michael Jackson", "Justin Bieber", "Elvis Presley"],
+                correct: 0
+            },
+            {
+                question: "'O Anjo das Pernas Tortas' se refere a:",
+                options: ["Pelé", "Garrincha", "Zico"],
+                correct: 1
+            },
+            {
+                question: "'A Dama de Ferro' é o epíteto de:",
+                options: ["Elizabeth II", "Angela Merkel", "Margaret Thatcher"],
+                correct: 2
+            }
+            
+            
+        ];
+
+        let currentScore = 0;
+
+        function createQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p><strong>Questão ${index + 1}:</strong> ${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option">
+                                <input type="radio" name="q${index}" value="${i}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="result"></div>
+                `;
+                quizDiv.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswer(questionIndex, selectedOption) {
+            const resultDiv = document.querySelectorAll('.result')[questionIndex];
+            if (selectedOption === questions[questionIndex].correct) {
+                currentScore += 10;
+                resultDiv.textContent = "Correto! +10 pontos";
+                resultDiv.className = "result correct";
+            } else {
+                resultDiv.textContent = `Incorreto. A resposta correta era: ${questions[questionIndex].options[questions[questionIndex].correct]}`;
+                resultDiv.className = "result incorrect";
+            }
+            resultDiv.style.display = "block";
+            updateScore();
+        }
+
+        function updateScore() {
+            const scoreDiv = document.getElementById('score-display');
+            let message = `Pontuação atual: ${currentScore} pontos\n`;
+            if (currentScore === 50) message += "Especialista em epítetos!";
+            else if (currentScore >= 40) message += "Ótimo conhecimento!";
+            else if (currentScore >= 30) message += "Bom conhecimento!";
+            else if (currentScore >= 20) message += "Conhecimento regular.";
+            else if (currentScore >= 10) message += "Precisa estudar mais.";
+            else message += "Hora de revisar os epítetos!";
+            scoreDiv.textContent = message;
+        }
+
+        window.onload = function() {
+            createQuiz();
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const questionIndex = parseInt(e.target.name.replace('q', ''));
+                    checkAnswer(questionIndex, parseInt(e.target.value));
+                });
+            });
+        };
+    </script>
+</body>
+</html>
